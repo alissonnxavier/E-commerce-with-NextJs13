@@ -1,6 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// always remember about this steps
+  //First run the following command 'npx prisma generate
+  //Second run the following command 'npx prisma db push' 
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,9 +16,21 @@ datasource db {
 }
 
 model Store {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   name      String
   userId    String
+  Billboard Billboard[] @relation("StoreToBillboard")
+  createdAt DateTime    @default(now())
+  upadateAt DateTime    @updatedAt
+}
+
+model Billboard {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation("StoreToBillboard", fields: [storeId], references: [id])
+  label     String
   createdAt DateTime @default(now())
-  upadateAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
 }

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { Trash } from "lucide-react"
-import { Store } from "@prisma/client"
+import { Billboard } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -26,17 +26,18 @@ import AlertModal from "@/components/modal/alert-modal";
 import { ApiAlert } from "@/components/ui/api-alert";
 import { useOrigin } from "@/hooks/use-origin";
 
-const formSchema = z.object({
-    name: z.string().min(2),
-});
-
-type SettingsFormValues = z.infer<typeof formSchema>
-
-interface SettingsFormProps {
-    initialData: Store;
+interface BillboardFormProps {
+    initialData: Billboard | null;
 };
 
-export const SettingsForm: React.FC<SettingsFormProps> = ({
+const formSchema = z.object({
+    label: z.string().min(1),
+    imageUrl: z.string().min(1),
+});
+
+type BillboardFormValues = z.infer<typeof formSchema>
+
+export const BillboardForm: React.FC<BillboardFormProps> = ({
     initialData
 }) => {
 
@@ -47,12 +48,20 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const form = useForm<SettingsFormValues>({
+    const title = initialData ? 'Edit billboard' : 'Create billboard';
+    const description = initialData ? 'Edit a billboard.' : 'Add a new billboard';
+    const toastMessage = initialData ? 'Billboard updated.' : 'Billboard created.';
+    const action = initialData ? 'Save changes' : 'Create';
+
+    const form = useForm<BillboardFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData
+        defaultValues: initialData || {
+            label: '',
+            imageUrl: ''
+        }
     });
 
-    const onSubmit = async (data: SettingsFormValues) => {
+    const onSubmit = async (data: BillboardFormValues) => {
         try {
             setLoading(true);
             await axios.patch(`/api/stores/${params.storeId}`, data);
@@ -113,8 +122,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             />
             <div className="flex items-center justify-between">
                 <Heading
-                    title='Settings'
-                    description='Manage store preferences'
+                    title={title}
+                    description={description}
                 />
                 <Button
                     disabled={loading}
@@ -131,10 +140,10 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     <div className="grid grid-cols-3 gap-8 ">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="label"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Name</FormLabel>
+                                    <FormLabel>Label</FormLabel>
                                     <FormControl>
                                         <Input disabled={loading} placeholder="Store name" {...field} />
                                     </FormControl>
@@ -144,18 +153,12 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                         />
                     </div>
                     <Button disabled={loading} className="ml-auto" type="submit">
-                        Save changes
+                        {action}
                     </Button>
                 </form>
             </Form>
             <Separator />
-            <ApiAlert
-                title="NEXT_PUBLIC_API_URL"
-                description={`${origin}/api/${params.storeId}`}
-                variant="public"
-            />
+           
         </>
     )
 }
-
-export default SettingsForm;
