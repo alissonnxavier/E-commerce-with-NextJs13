@@ -65,9 +65,14 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     const onSubmit = async (data: BillboardFormValues) => {
         try {
             setLoading(true);
-            await axios.patch(`/api/stores/${params.storeId}`, data);
+            if (initialData) {
+                await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
+            } else {
+                await axios.post(`/api/${params.storeId}/billboards`, data);
+            }
             router.refresh();
-            toast.success('Store updated.', {
+            router.push(`/${params.storeId}/billboards`);
+            toast.success(toastMessage, {
                 style: {
                     border: '3px solid white',
                     padding: '26px',
@@ -80,8 +85,20 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 },
 
             });
-        } catch (error) {
-            toast.error('Something went wrong.');
+        } catch (error: any) {
+            toast.error('Something went wrong.', {
+                style: {
+                    border: '3px solid white',
+                    padding: '26px',
+                    color: 'white',
+                    backgroundColor: '#c70835'
+                },
+                iconTheme: {
+                    primary: 'white',
+                    secondary: '#c70835',
+                },
+
+            });
         } finally {
             setLoading(false);
         }
@@ -90,23 +107,12 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     const onDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete(`/api/stores/${params.storeId}`);
+            await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
             router.refresh();
-            router.push('/');
-            toast.success('Store deleted.', {
-                style: {
-                    border: '4px solid white',
-                    padding: '26px',
-                    color: 'white',
-                    backgroundColor: '#0404c9',
-                },
-                iconTheme: {
-                    primary: 'white',
-                    secondary: '#0404c9',
-                },
-            });
-        } catch (error) {
-            toast.error('Make sure you removed all products and categories first');
+            router.push(`/${params.storeId}/billboards`);
+            toast.success('Billboard deleted.');
+        } catch (error: any) {
+            toast.error('Make sure you removed all categories using this billboard first.');
         } finally {
             setLoading(false);
             setOpen(false);
