@@ -21,8 +21,8 @@ export const AlertModal: React.FC<AlertModalProps> = ({
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setIsMounted(true);
-    }, [setIsMounted]);
+        setIsMounted(!loading);      
+    }, [loading]);
 
     if (!isMounted) {
         return null;
