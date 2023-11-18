@@ -36,7 +36,6 @@ export const CellAction: React.FC<CellActionProps> = ({
     try {
       setLoading(true)
       await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
-      router.refresh();
       toast.success('Bilboard deleted!', {
         style: {
           border: '3px solid white',
@@ -49,6 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({
           secondary: '#262502',
         },
       });
+      router.refresh();
     } catch (error) {
       toast.error('Make sure you removed all categories using this billboard first.', {
         style: {

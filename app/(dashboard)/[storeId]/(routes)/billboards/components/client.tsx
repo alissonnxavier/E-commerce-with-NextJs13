@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { BillboardColumn, columns } from "./columns";
 import { Separator } from "@radix-ui/react-separator";
 import { DataTable } from "@/components/ui/data-table";
+import { ApiList } from "@/components/ui/api-list";
 
 interface BillboardClientProps {
     data: BillboardColumn[]
@@ -31,8 +32,10 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
                     Add New
                 </Button>
             </div>
-            <Separator/>
-            <DataTable searchKey="label" columns={columns} data={data}/>
+            <Separator />
+            <DataTable searchKey="label" columns={columns} data={data} />
+            <Heading title="API" description="API calls for Bilboards" />
+            <ApiList entityName="billboards" entityIdName="billboardId" />
         </>
     )
 }
