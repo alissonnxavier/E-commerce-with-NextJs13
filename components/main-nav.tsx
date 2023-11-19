@@ -65,8 +65,8 @@ export function MainNav({
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-primary ",
-            route.active ? 'text-black dark:text-white' : 'text-muted-foreground'
+            "text-sm font-medium  hover:text-pink-500 p-3 ",
+            route.active ? ' p-3 dark:text-white ring ring-pink-500 ring-offset-2 ring-offset-slate-50 rounded-lg drop-shadow-xl dark:ring-offset-slate-900  text-pink-500' : 'text-muted-foreground'
           )}
         >
           {route.label}
