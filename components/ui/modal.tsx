@@ -31,7 +31,7 @@ export const Modal: React.FC<ModalProps> = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={onChange}>
-            <DialogContent className="shadow-lg shadow-red-600/50">
+            <DialogContent className="drop-shadow-sm">
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>
