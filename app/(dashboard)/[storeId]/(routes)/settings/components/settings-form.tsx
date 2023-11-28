@@ -39,7 +39,6 @@ interface SettingsFormProps {
 export const SettingsForm: React.FC<SettingsFormProps> = ({
     initialData
 }) => {
-
     const params = useParams();
     const router = useRouter();
     const origin = useOrigin();
@@ -70,7 +69,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 },
 
             });
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Something went wrong.');
         } finally {
             setLoading(false);
@@ -95,7 +94,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     secondary: '#0404c9',
                 },
             });
-        } catch (error) {
+        } catch (error: any) {
             toast.error('Make sure you removed all products and categories first');
         } finally {
             setLoading(false);
@@ -112,14 +111,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 loading={loading}
             />
             <div className="flex items-center justify-between">
-                <Heading
-                    title='Settings'
-                    description='Manage store preferences'
-                />
+                <Heading title="Store settings" description="Manage store preferences" />
                 <Button
                     disabled={loading}
-                    variant='destructive'
-                    size='icon'
+                    variant="destructive"
+                    size="sm"
                     onClick={() => setOpen(true)}
                 >
                     <Trash className="h-4 w-4" />
@@ -128,7 +124,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             <Separator />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-                    <div className="grid grid-cols-3 gap-8 ">
+                    <div className="grid grid-cols-3 gap-8">
                         <FormField
                             control={form.control}
                             name="name"
@@ -151,11 +147,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             <Separator />
             <ApiAlert
                 title="NEXT_PUBLIC_API_URL"
-                description={`${origin}/api/${params.storeId}`}
                 variant="public"
+                description={`${origin}/api/${params.storeId}`}
             />
         </>
-    )
+    );
 }
 
 export default SettingsForm;
